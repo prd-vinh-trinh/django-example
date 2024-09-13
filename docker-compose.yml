@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .  # This tells Docker Compose to use the Dockerfile in the current directory
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./Backend:/app  # Mount the backend folder to /app inside the container
+    ports:
+      - "8888:8000"
+    # depends_on:
+    #   - db  # Ensure db service starts first
+    environment:
+      - DEBUG=1  # Add any environment variables needed for Django
+
+#   db:
+#     image: postgres:14  # Use PostgreSQL version 14 as the database
+#     environment:
+#       POSTGRES_DB: mydb
+#       POSTGRES_USER: user
+#       POSTGRES_PASSWORD: password
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data/  # Persistent storage for database
+#     ports:
+#       - "5432:5432"  # Expose PostgreSQL port
+
+# volumes:
+#   postgres_data:  # Define a named volume for persistent data
