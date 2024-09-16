@@ -1,6 +1,6 @@
-FROM python:3.12
+FROM python:3.12-slim
 
-WORKDIR /app
+WORKDIR /usr/src/app
 
 
 RUN apt-get update && apt-get install -y \
@@ -14,11 +14,20 @@ COPY requirements.txt .
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
+RUN python manage.py migrate
+
 # Copy the entire project into the container's working directory
 COPY . /app/
 
-# Open port 8000 to allow traffic
-EXPOSE 8000
+# Convert plain text files from Windows or Mac format to Unix
+RUN apt-get install dos2unix
+RUN dos2unix --newfile docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
+# Make entrypoint executable
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Entrypoint dependencies
+RUN apt-get install netcat -y
+
+# run entrypoint.sh
+ENTRYPOINT ["bash", "/usr/local/bin/docker-entrypoint.sh"]
