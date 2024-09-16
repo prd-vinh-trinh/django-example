@@ -4,7 +4,7 @@ services:
       context: .
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - ./Backend:/app 
+      - .:/app 
     ports:
       - "8080:8000"
     depends_on:
@@ -22,7 +22,7 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql  
     ports:
-      - "3306:3306"  
+      - "3306:${DB_PORT}"  
     healthcheck:
       test: ["CMD", "mysql", "-h", "localhost", "-u", "root", "-p${DB_PASSWORD}", "-e", "SELECT 1"]
       timeout: 20s
