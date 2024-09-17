@@ -2,15 +2,21 @@ services:
   web:
     build:
       context: .
+      dockerfile: Dockerfile
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - .:/app 
+      - .:/usr/src/app/
     ports:
       - "8080:8000"
     depends_on:
-      - db  
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     env_file:
       - .env
+    networks:
+      - network
 
   db:
     image: mysql:8
@@ -25,8 +31,24 @@ services:
       - "3306:${DB_PORT}"  
     healthcheck:
       test: ["CMD", "mysql", "-h", "localhost", "-u", "root", "-p${DB_PASSWORD}", "-e", "SELECT 1"]
-      timeout: 20s
+      timeout: 1s
       retries: 10
+    networks:
+      - network
+
+  redis:
+    image: 'redis:alpine'
+    hostname: redis
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      interval: 1s
+      timeout: 3s
+      retries: 5
+    networks:
+      - network
 
 volumes:
-  mysql_data:  
+  mysql_data:
+
+networks:
+  network:

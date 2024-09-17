@@ -1,19 +1,17 @@
 #!/bin/bash
 
-if [ "$DATABASE" = "mysql" ]
-then
-    echo "Waiting for mysql..."
-    while ! nc -z $SQL_HOST $SQL_PORT; do
-      sleep 0.1
-    done
-    echo "MySQL started"
+# Check if the database exists, and create it if it doesn't
+echo "Checking if database ${DB_NAME} exists..."
+DB_EXISTS=$(mysql -h"${DB_HOST}" -u"${DB_USER}" -p"${DB_PASSWORD}" -e "SHOW DATABASES LIKE '${DB_NAME}';" | grep "${DB_NAME}")
+
+if [ -z "$DB_EXISTS" ]; then
+  echo "Database ${DB_NAME} does not exist. Creating..."
+  mysql -h"${DB_HOST}" -u"${DB_USER}" -p"${DB_PASSWORD}" -e "CREATE DATABASE ${DB_NAME};"
+else
+  echo "Database ${DB_NAME} already exists."
 fi
 
-# Décommenter pour supprimer la bdd à chaque redémarrage (danger)
-# echo "Clear entire database"
-# python manage.py flush --no-input
-
-echo "Appling database migrations..."
+echo "Applying database migrations..."
 python manage.py makemigrations 
 python manage.py migrate
 
