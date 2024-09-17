@@ -69,6 +69,8 @@ REST_FRAMEWORK = {
 
 
 # Database
+DATABASE_ROUTERS = ['core.utils.db_routers.NonRelRouter', ]
+
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 DB_NAME = os.getenv("DB_NAME", default="mydb")
 DATABASES = {
@@ -80,6 +82,19 @@ DATABASES = {
         "HOST": os.getenv("DB_HOST", default="mydb"),
         "PORT": os.getenv("DB_PORT", default="mydb"),
         "OPTIONS": {"charset": "utf8mb4"},
+    },
+    "nonrel": {
+        "ENGINE": "djongo",
+        "NAME": os.environ.get('MONGO_DB_NAME'),
+        "CLIENT": {
+            "host": os.environ.get('MONGO_DB_HOST'),
+            "port": int(os.environ.get('MONGO_DB_PORT')),
+            "username": os.environ.get('MONGO_DB_USERNAME'),
+            "password": os.environ.get('MONGO_DB_PASSWORD'),
+        },
+        'TEST': {
+            'MIRROR': 'default',
+        },
     }
 }
 
