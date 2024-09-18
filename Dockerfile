@@ -25,6 +25,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the entire project into the container's working directory
 COPY . /app/
+
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
 

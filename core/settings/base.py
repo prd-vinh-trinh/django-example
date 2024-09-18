@@ -1,11 +1,12 @@
 import os
 from pathlib import Path
 
+from ..scopes import scopes,default_scopes
 from dotenv import load_dotenv
 
 load_dotenv()
 
-SECRET_KEY = 'django-insecure-)lg*r+g30=z!0d1v_9do=oi_lx(qkpvyt@8fomhs)1u(1&$i*9'
+SECRET_KEY = os.getenv("SECRET_KEY",default='django-insecure-)lg*r+g30=z!0d1v_9do=oi_lx(qkpvyt@8fomhs)1u(1&$i*9')
 
 DEBUG = os.getenv("DEBUG", default=True)
 
@@ -27,7 +28,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'base',
     'oauth',
-    'api_user',
+    'api_users',
     'api_test'
 ]
 
@@ -64,9 +65,26 @@ WSGI_APPLICATION = 'core.wsgi.application'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
-    )
+    ),
+    "DEFAULT_PERMISSION_CLASSES": ["oauth.permissions.TokenMatchesOASRequirements"],
 }
 
+OAUTH2_PROVIDER = {
+    # this is the list of available scopes
+    'SCOPES': scopes,
+    "DEFAULT_SCOPES": default_scopes,
+}
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = os.getenv("EMAIL_HOST", default="smtp.gmail.com")
+EMAIL_PORT = os.getenv("EMAIL_PORT", default=587)
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+DEFAULT_FROM_EMAIL = os.getenv(
+    "DEFAULT_FROM_EMAIL", default="Django-example <noreply@domain.com>"
+)
 
 # Database
 DATABASE_ROUTERS = ['core.utils.db_routers.NonRelRouter', ]
