@@ -33,7 +33,7 @@ source .venv/bin/activate
 
 #### 1.1.3.Windows
 ```
-py -3 -m venv .venv
+py.exe -3 -m venv .venv
 .venv\scripts\activate
 ```
 ### 1.2. Install libraries for backend
