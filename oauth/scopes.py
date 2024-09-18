@@ -1,13 +1,14 @@
 default_scopes = {
-    "spaces:view": "View spaces",
-    "spaces:edit": "Edit spaces",
+    "users:view-mine": "View my account information",
+    "users:edit-mine": "Edit my account information",
 }
 
 scopes = {
-    "spaces:view": "View spaces",
-    "spaces:edit": "Edit spaces",
+    "openid": "OpenID Connect scope",
 }
 
 scopes.update(default_scopes);
+
+
 
 
