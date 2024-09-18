@@ -9,7 +9,7 @@ services:
     ports:
       - "8080:8000"
     depends_on:
-      db:
+      mysql:
         condition: service_healthy
       redis:
         condition: service_healthy
@@ -18,7 +18,7 @@ services:
     networks:
       - network
 
-  db:
+  mysql:
     image: mysql:8
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}

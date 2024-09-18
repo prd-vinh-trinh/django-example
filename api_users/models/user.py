@@ -5,7 +5,7 @@ from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.hashers import make_password
 
 from api_users.managers.user_manager import UserManager
-from core.settings import settings
+from django.conf import settings
 from api_users.models.role import Role
 from base.models.time_stamped import TimeStampedModel
 
