@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 
+from ..scopes import scopes,default_scopes
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -27,7 +28,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'base',
     'oauth',
-    'api_user',
+    'api_users',
     'api_test'
 ]
 
@@ -64,8 +65,16 @@ WSGI_APPLICATION = 'core.wsgi.application'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
-    )
+    ),
+    "DEFAULT_PERMISSION_CLASSES": ["oauth.permissions.TokenMatchesOASRequirements"],
 }
+
+OAUTH2_PROVIDER = {
+    # this is the list of available scopes
+    'SCOPES': scopes,
+    "DEFAULT_SCOPES": default_scopes,
+}
+
 
 
 # Database
