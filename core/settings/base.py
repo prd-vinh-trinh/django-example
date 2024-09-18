@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-SECRET_KEY = 'django-insecure-)lg*r+g30=z!0d1v_9do=oi_lx(qkpvyt@8fomhs)1u(1&$i*9'
+SECRET_KEY = os.getenv("SECRET_KEY",default='django-insecure-)lg*r+g30=z!0d1v_9do=oi_lx(qkpvyt@8fomhs)1u(1&$i*9')
 
 DEBUG = os.getenv("DEBUG", default=True)
 
