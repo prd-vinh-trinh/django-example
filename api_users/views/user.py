@@ -3,7 +3,6 @@ from api_users.models.user import User
 from api_users.serializers import UserSerializer
 from base.services.verification import Verification
 from base.views.base import BaseViewSet
-# from base.pagination import CustomPagination
 from django.contrib.auth import password_validation
 from django.utils.translation import gettext as _
 from rest_framework import viewsets
@@ -29,9 +28,9 @@ from rest_framework.status import (
 class UserViewSet(BaseViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    # pagination_class = CustomPagination
     required_alternate_scopes = {
         "create": [["admin:users:edit"]],
+        "invite": [["admin:users:edit"],],
         "retrieve": [
             ["admin:users:view"],
             ["admin:users:edit"],
@@ -120,6 +119,13 @@ class UserViewSet(BaseViewSet):
 
         return Response({"message": _("The passwword have been updated.")})
 
+    @action(methods=["get"], detail=True, url_path="invite")
+    def invite(self, request, *args, **kwargs):
+        email = request.data.get("email")
+        user = self.get_object()
+        user.send_invitation_email(email)
+
+        return Response({"message": _("The passwword have been updated.")})
 
     @action(detail=False, methods=["post"], url_path="verify_invitation", permission_classes=[AllowAny], authentication_classes=[])
     def verify_invitation(self, request, *args, **kwargs):

@@ -1,13 +1,10 @@
-from rest_framework import generics, permissions, serializers
+from rest_framework import serializers
 
 from api_users.models.user import User
 from api_users.models.role import Role
-from django.contrib.auth.hashers import make_password
-
 from api_users.serializers.role import RoleSerializer
 
 
-# first we define the serializers
 class UserSerializer(serializers.ModelSerializer):
     roles = RoleSerializer(required=False, many=True)
 
