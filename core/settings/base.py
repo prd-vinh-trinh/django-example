@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'base',
     'api_users',
+    'api_auth',
 ]
 
 MIDDLEWARE = [
@@ -105,7 +106,7 @@ DATABASE_ROUTERS = ['core.utils.db_routers.NonRelRouter', ]
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 DATABASES = {
     'default': {
-        "ENGINE": os.getenv("SQL_ENGINE", default="django.db.backends.mysql"),
+        "ENGINE": 'django.db.backends.mysql',
         'NAME': os.getenv("DB_NAME", default="mydb"),
         "USER": os.getenv("DB_USER", default="mydb"),
         "PASSWORD": os.getenv("DB_PASSWORD", default="mydb"),
