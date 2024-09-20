@@ -36,7 +36,6 @@ class UserViewSet(BaseViewSet):
         "update": [
             ["admin:users:edit"],
         ],
-        "destroy": [["admin:users:edit"]],
         "multiple_delele": [["admin:users:edit"]],
         "list": [["admin:users:view"]],
         "change_password": [["users:edit-mine"]],
@@ -53,11 +52,6 @@ class UserViewSet(BaseViewSet):
         if self.action in []:
             return [AllowAny()]
         return [IsAuthenticated()]
-
-    # def retrieve(self, request, *args, **kwargs):
-    #     instance = self.get_object()
-    #     serializer = self.get_serializer(instance)
-    #     return Response(serializer.data)
 
     @action(methods=["get"], detail=False, url_path="get-self-information")
     def get_self_information(self, request, *args, **kwargs):

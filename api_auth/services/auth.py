@@ -1,6 +1,3 @@
-from urllib.parse import urlparse
-from typing import Any, List, Tuple
-
 from base.services import BaseService, Mailing, Verification
 from django.conf import settings
 from django.utils.translation import gettext as _

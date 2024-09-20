@@ -1,1 +1,1 @@
-from .auth import UserService
+from .auth import AuthService
