@@ -5,6 +5,7 @@ from django.core.mail import EmailMessage, EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 
+
 class MailingThread(threading.Thread):
     def __init__(
         self,
@@ -12,7 +13,7 @@ class MailingThread(threading.Thread):
         fail_callback=None
     ):
         self.messages = messages
-        self.fail_callback =  fail_callback
+        self.fail_callback = fail_callback
         threading.Thread.__init__(self)
 
     def run(self):
@@ -20,7 +21,6 @@ class MailingThread(threading.Thread):
             try:
                 message.send()
             except Exception as e:
-                # TODO: Add a log right here
                 print(str(e))
                 if self.fail_callback:
                     self.fail_callback(message)
@@ -38,7 +38,8 @@ class Mailing:
     @classmethod
     def create_html_message(cls, data, attachment=None, headers=None):
         subject = data.get("subject")
-        from_email=data.get("from") or settings.DEFAULT_FROM_EMAIL or "Django-example <noreply@domain.com.vn>"
+        from_email = data.get(
+            "from") or settings.DEFAULT_FROM_EMAIL or "Django-example <noreply@domain.com.vn>"
         to = data.get("to")
         html_content = render_to_string(
             data.get("template"), data.get("context")
@@ -55,5 +56,4 @@ class Mailing:
                 attachment.content,
                 attachment.mimetype,
             )
-        # print('msg: ',msg)
         return msg

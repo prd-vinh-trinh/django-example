@@ -7,7 +7,7 @@ services:
     volumes:
       - .:/usr/src/app/
     ports:
-      - "8080:8000"
+      - '8080:8000'
     depends_on:
       mysql:
         condition: service_healthy
@@ -26,49 +26,60 @@ services:
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
     volumes:
-      - mysql_data:/var/lib/mysql  
+      - mysql_data:/var/lib/mysql
     ports:
-      - "3306:${DB_PORT}"  
+      - '3306:${DB_PORT}'
     healthcheck:
-      test: ["CMD", "mysql", "-h", "localhost", "-u", "root", "-p${DB_PASSWORD}", "-e", "SELECT 1"]
+      test:
+        [
+          'CMD',
+          'mysql',
+          '-h',
+          'localhost',
+          '-u',
+          'root',
+          '-p${DB_PASSWORD}',
+          '-e',
+          'SELECT 1',
+        ]
       timeout: 1s
       retries: 20
     networks:
       - network
 
-  mongo:
-    image: mongo
-    container_name: mongo
-    restart: always
-    env_file: .env
-    environment: 
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=root
-      - MONGO_INITDB_DATABASE=${MONGO_DB_NAME}
-      - MONGO_INITDB_USERNAME=${MONGO_DB_USERNAME}
-      - MONGO_INITDB_PASSWORD=${MONGO_DB_PASSWORD}
-    volumes:
-      - ${PWD}/_data/mongo:/data/db
-      - ${PWD}/docker/_mongo/fixtures:/import
-      - ${PWD}/docker/_mongo/scripts/init.sh:/docker-entrypoint-initdb.d/setup.sh
-    ports:
-      - 27017:27017
-    networks:
-      - network
+  # mongo:
+  #   image: mongo
+  #   container_name: mongo
+  #   restart: always
+  #   env_file: .env
+  #   environment:
+  #     - MONGO_INITDB_ROOT_USERNAME=root
+  #     - MONGO_INITDB_ROOT_PASSWORD=root
+  #     - MONGO_INITDB_DATABASE=${MONGO_DB_NAME}
+  #     - MONGO_INITDB_USERNAME=${MONGO_DB_USERNAME}
+  #     - MONGO_INITDB_PASSWORD=${MONGO_DB_PASSWORD}
+  #   volumes:
+  #     - ${PWD}/_data/mongo:/data/db
+  #     - ${PWD}/docker/_mongo/fixtures:/import
+  #     - ${PWD}/docker/_mongo/scripts/init.sh:/docker-entrypoint-initdb.d/setup.sh
+  #   ports:
+  #     - 27017:27017
+  #   networks:
+  #     - network
 
   redis:
     image: 'redis:alpine'
     restart: always
     hostname: redis
     ports:
-      - "6379:${REDIS_PORT}"  
+      - '6379:${REDIS_PORT}'
     healthcheck:
-      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      test: ['CMD-SHELL', 'redis-cli ping | grep PONG']
       interval: 1s
       timeout: 3s
       retries: 5
     volumes:
-      - redis-data:/var/lib/redis 
+      - redis-data:/var/lib/redis
     networks:
       - network
 
