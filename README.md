@@ -1,6 +1,6 @@
 # Django Example Project
 
-This project build with django framework, intergrade with mysql mongodb redis, ... and dockerize it
+This project build with django framework, integrate with mysql mongodb redis, ... and dockerize it
 
 ## 1. Setup
 
@@ -64,13 +64,7 @@ copy [.env.sample](.env.sample) to `.env`. Open this file and change the variabl
 python ./backend/manage.py migrate
 ```
 
-### 1.5. Create OIDC key
-
-```
-openssl genrsa -out oidc.key 4096
-```
-
-### 1.6. Run backend
+### 1.5. Run backend
 
 Open source code with Visual Studio -> Chose `Run and Debug` on the left panel -> Click `Start Debuging`
 Or open terminal using: python manage.py runserver
