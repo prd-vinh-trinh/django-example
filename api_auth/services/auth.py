@@ -27,7 +27,7 @@ class AuthService(BaseService):
             if api_host.startswith("localhost") or api_host[0].isdigit()
             else "https"
         )
-        link = f"{admin_scheme}://{api_host}/user/verify?token={token}"
+        link = f"{admin_scheme}://{api_host}/auth/verify?token={token}"
         data = {
             "template": "auth/emails/email_verify_register.html",
             "subject": _("Create account"),
