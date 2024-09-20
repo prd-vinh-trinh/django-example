@@ -42,6 +42,7 @@ class UserViewSet(BaseViewSet):
         "change_password": [["users:edit-mine"]],
         "get_self_information": [["users:view-mine"]],
     }
+
     search_map = {
         "first_name": "icontains",
         "last_name": "icontains",
@@ -49,39 +50,20 @@ class UserViewSet(BaseViewSet):
     }
 
     def get_permissions(self):
-        """Returns the permission based on the type of action"""
-        if self.action in ["get_name_by_id"]:
+        if self.action in []:
             return [AllowAny()]
         return [IsAuthenticated()]
 
-    def retrieve(self, request, *args, **kwargs):
-        """Override retrieve to customize JSON response if needed"""
-        instance = self.get_object()
-        serializer = self.get_serializer(instance)
-        return Response(serializer.data)
+    # def retrieve(self, request, *args, **kwargs):
+    #     instance = self.get_object()
+    #     serializer = self.get_serializer(instance)
+    #     return Response(serializer.data)
 
     @action(methods=["get"], detail=False, url_path="get-self-information")
     def get_self_information(self, request, *args, **kwargs):
-        user = request.user  # Retrieves the currently authenticated user
+        user = request.user
         serializer = self.get_serializer(user)
         return Response(serializer.data, status=HTTP_200_OK)
-
-    @action(methods=["get"], detail=False, url_path="get-name")
-    def get_name_by_id(self, request, *args, **kwargs):
-        user_id = request.query_params.get('id')
-        try:
-            user = User.objects.get(id=user_id)
-        except User.DoesNotExist:
-            return Response({'error': 'User not found'}, status=HTTP_404_NOT_FOUND)
-
-        # Use the serializer to get the user data
-        serializer = self.get_serializer(user)
-        user_data = {
-            "id": serializer.data['id'],
-            "first_name": serializer.data['first_name'],
-            "last_name": serializer.data['last_name']
-        }
-        return Response(user_data, status=HTTP_200_OK)
 
     @action(methods=["put"], detail=True)
     def change_password(self, request, *args, **kwargs):
@@ -114,52 +96,3 @@ class UserViewSet(BaseViewSet):
             )
 
         return Response({"message": _("The passwword have been updated.")})
-
-    @action(methods=["get"], detail=True, url_path="invite")
-    def invite(self, request, *args, **kwargs):
-        email = request.data.get("email")
-        user = self.get_object()
-        user.send_invitation_email(email)
-
-        return Response({"message": _("The passwword have been updated.")})
-
-    @action(detail=False, methods=["post"], url_path="verify_invitation", permission_classes=[AllowAny], authentication_classes=[])
-    def verify_invitation(self, request, *args, **kwargs):
-        content_type = request.content_type
-        data = request.data.copy()
-        if content_type is not None and 'form-data' in content_type:
-            form = NestedForm(request.data)
-            if form.is_nested():
-                data = form.data
-        token = data.get('token')
-        if token is not None:
-            del data['token']
-
-        try:
-            token_payload = Verification.decode_token(token)
-            token_email = token_payload.get('email')
-            print('token_email: ', token_email)
-            user = User.objects.get(email=token_email)
-            if user is None:
-                return Response(
-                    {"error": _("Invalid token")},
-                    status=HTTP_406_NOT_ACCEPTABLE,
-                )
-            if user.is_active == False:
-                user.is_active = True
-                user.save()
-            else:
-                return Response(
-                    {"error": _("User already activated")},
-                    status=HTTP_400_BAD_REQUEST,
-                )
-            return Response(
-                {"message": _("User activated successfully")},
-                status=HTTP_200_OK,
-            )
-
-        except Exception as e:
-            return Response(
-                {"error": _("Invalid token")},
-                status=HTTP_406_NOT_ACCEPTABLE,
-            )

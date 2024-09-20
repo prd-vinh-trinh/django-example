@@ -76,6 +76,8 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
 }
+API_HOST = os.getenv("API_HOST", default="localhost:8000")
+DEFAULT_HOST = os.getenv("DEFAULT_HOST", default="localhost:8000")
 
 AUTH_USER_MODEL = 'api_users.User'
 
