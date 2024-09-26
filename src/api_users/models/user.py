@@ -23,7 +23,7 @@ class User(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
         max_length=255, blank=False,
         null=False, default=AUTH_PROVIDERS.get('email'))
     USERNAME_FIELD = "email"
-
+    
     class Meta:
         db_table = "users"
 

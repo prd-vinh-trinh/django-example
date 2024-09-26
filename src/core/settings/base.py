@@ -73,8 +73,12 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
+    # 'DEFAULT_PERMISSION_CLASSES': [
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
+        'core.permissions.CheckScopePermission',
     ],
 }
 API_HOST = os.getenv("API_HOST", default="localhost:8000")
@@ -104,7 +108,7 @@ DEFAULT_FROM_EMAIL = os.getenv(
 )
 
 # Database
-DATABASE_ROUTERS = ['core.utils.db_routers.DatabaseRouter', ]
+DATABASE_ROUTERS = ['core.utils.db_routers.DatabaseRouter',]
 
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 DATABASES = {
