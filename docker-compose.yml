@@ -1,11 +1,11 @@
 services:
   web:
     build:
-      context: .
+      context: ./src
       dockerfile: Dockerfile
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - .:/usr/src/app/
+      - .:/app/
     ports:
       - '8080:8000'
     depends_on:
@@ -26,7 +26,7 @@ services:
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
     volumes:
-      - mysql_data:/var/lib/mysql
+      - ./docker_volume/mysql_data:/var/lib/mysql
     ports:
       - '3306:${DB_PORT}'
     healthcheck:
@@ -47,25 +47,23 @@ services:
     networks:
       - network
 
-  mongo:
-    image: mongo
-    container_name: mongo
-    restart: always
-    env_file: .env
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=root
-      - MONGO_INITDB_DATABASE=${MONGO_DB_NAME}
-      - MONGO_INITDB_USERNAME=${MONGO_DB_USERNAME}
-      - MONGO_INITDB_PASSWORD=${MONGO_DB_PASSWORD}
-    volumes:
-      - ${PWD}/_data/mongo:/data/db
-      - ${PWD}/docker/_mongo/fixtures:/import
-      - ${PWD}/docker/_mongo/scripts/init.sh:/docker-entrypoint-initdb.d/setup.sh
-    ports:
-      - 27017:27017
-    networks:
-      - network
+  # mongo:
+  #   image: mongo
+  #   container_name: mongo
+  #   restart: always
+  #   env_file: .env
+  #   environment:
+  #     - MONGO_INITDB_ROOT_USERNAME=root
+  #     - MONGO_INITDB_ROOT_PASSWORD=root
+  #     - MONGO_INITDB_DATABASE=${MONGO_DB_NAME}
+  #     - MONGO_INITDB_USERNAME=${MONGO_DB_USERNAME}
+  #     - MONGO_INITDB_PASSWORD=${MONGO_DB_PASSWORD}
+  #   volumes:
+  #     - ${PWD}/_data/mongo:/data/dbsh
+  #   ports:
+  #     - 27017:27017
+  #   networks:
+  #     - network
 
   redis:
     image: 'redis:alpine'
@@ -79,7 +77,7 @@ services:
       timeout: 3s
       retries: 5
     volumes:
-      - redis-data:/var/lib/redis
+      - ./docker_volume/redis-data:/var/lib/redis
     networks:
       - network
 
