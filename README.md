@@ -20,7 +20,7 @@ Make sure these software have been installed on your computers:
       export CPPFLAGS="-isysroot $(xcrun --show-sdk-path) -I/usr/include -L/usr/lib"
   ```
 
-### 1.1. Create python virtual evironment
+### 1.1. Create python virtual evironment (with 2 method)
 
 Follow one of these guide to create python virtual environment corresponding to your operating system.
 

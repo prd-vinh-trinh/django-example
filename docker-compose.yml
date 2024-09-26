@@ -26,7 +26,7 @@ services:
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
     volumes:
-      - mysql_data:/var/lib/mysql
+      - ./docker_volume/mysql_data:/var/lib/mysql
     ports:
       - '3306:${DB_PORT}'
     healthcheck:
@@ -59,9 +59,7 @@ services:
       - MONGO_INITDB_USERNAME=${MONGO_DB_USERNAME}
       - MONGO_INITDB_PASSWORD=${MONGO_DB_PASSWORD}
     volumes:
-      - ${PWD}/_data/mongo:/data/db
-      - ${PWD}/docker/_mongo/fixtures:/import
-      - ${PWD}/docker/_mongo/scripts/init.sh:/docker-entrypoint-initdb.d/setup.sh
+      - ${PWD}/_data/mongo:/data/dbsh
     ports:
       - 27017:27017
     networks:
@@ -79,7 +77,7 @@ services:
       timeout: 3s
       retries: 5
     volumes:
-      - redis-data:/var/lib/redis
+      - ./docker_volume/redis-data:/var/lib/redis
     networks:
       - network
 

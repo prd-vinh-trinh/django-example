@@ -104,7 +104,7 @@ DEFAULT_FROM_EMAIL = os.getenv(
 )
 
 # Database
-DATABASE_ROUTERS = ['core.utils.db_routers.NonRelRouter', ]
+DATABASE_ROUTERS = ['core.utils.db_routers.DatabaseRouter', ]
 
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 DATABASES = {
@@ -117,19 +117,19 @@ DATABASES = {
         "PORT": os.getenv("DB_PORT", default="mydb"),
         "OPTIONS": {"charset": "utf8mb4"},
     },
-    # "nonrel": {
-    #     "ENGINE": "djongo",
-    #     "NAME": os.environ.get('MONGO_DB_NAME'),
-    #     "CLIENT": {
-    #         "host": os.environ.get('MONGO_DB_HOST'),
-    #         "port": int(os.environ.get('MONGO_DB_PORT')),
-    #         "username": os.environ.get('MONGO_DB_USERNAME'),
-    #         "password": os.environ.get('MONGO_DB_PASSWORD'),
-    #     },
-    #     'TEST': {
-    #         'MIRROR': 'default',
-    #     },
-    # }
+    "nosql": {
+        "ENGINE": "djongo",
+        "NAME": os.environ.get('MONGO_DB_NAME'),
+        "CLIENT": {
+            "host": os.environ.get('MONGO_DB_HOST'),
+            "port": int(os.environ.get('MONGO_DB_PORT')),
+            "username": os.environ.get('MONGO_DB_USERNAME'),
+            "password": os.environ.get('MONGO_DB_PASSWORD'),
+        },
+        'TEST': {
+            'MIRROR': 'default',
+        },
+    }
 }
 
 CACHE_TTL = 60 * 1500

@@ -12,7 +12,6 @@ from base.models.time_stamped import TimeStampedModel
 AUTH_PROVIDERS = {'facebook': 'facebook', 'google': 'google',
                   'twitter': 'twitter', 'email': 'email'}
 
-
 class User(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
     password = models.CharField(verbose_name="password", max_length=255)
     email = models.EmailField(max_length=255, unique=True, null=True)
