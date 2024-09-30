@@ -22,3 +22,6 @@ oidc.key
 #Docker
 docker_volume
 docker_volume/*
+
+.idea/
+.vscode/
