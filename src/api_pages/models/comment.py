@@ -2,13 +2,13 @@ import mongoengine as me
 from datetime import datetime
 
 from api_pages.models.page import Page
+from base.models.time_stamped_document import BaseDocumentModel
 
-class Comment(me.Document):
+class Comment(BaseDocumentModel):
     page = me.ReferenceField(Page, reverse_delete_rule=me.CASCADE)
     parent_comment = me.ReferenceField('self', null=True, blank=True, reverse_delete_rule=me.CASCADE)
     content = me.StringField(required=True)
     created_at = me.DateTimeField(default=datetime.now)
-    author = me.StringField(max_length=100)
 
     meta = {
         'collection': 'comments',

@@ -4,7 +4,6 @@ import mongoengine as me
 from django.utils.timezone import now
 
 class BaseDocumentModel(me.Document):
-    id = me.UUIDField(primary_key=True) 
     created_at = me.DateTimeField(default=now)
     updated_at = me.DateTimeField()
 
