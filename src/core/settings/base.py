@@ -31,11 +31,12 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_swagger',
     'rest_framework_simplejwt',
+    'rest_framework_mongoengine',
     'drf_yasg',
     'base',
     'api_users',
     'api_auth',
-    'api_pages'
+    'api_pages',
 ]
 
 MIDDLEWARE = [
@@ -122,6 +123,9 @@ DATABASES = {
         "PORT": os.getenv("DB_PORT", default="mydb"),
         "OPTIONS": {"charset": "utf8mb4"},
     },
+    'nosql': {
+        'ENGINE': 'django.db.backends.dummy',
+    }
 }
 
 from mongoengine import connect
