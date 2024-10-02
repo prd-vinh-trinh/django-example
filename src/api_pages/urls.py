@@ -8,6 +8,7 @@ router = routers.SimpleRouter(trailing_slash=False)
 
 router.register(r"", PageViewSet, basename="page")
 
+
 urlpatterns = [
     path('api/v1/pages/', include(router.urls)),
 ]

@@ -1,4 +1,4 @@
-from rest_framework_mongoengine import DocumentSerializer
+from rest_framework_mongoengine.serializers import DocumentSerializer
 
 from api_pages.models.comment import Comment
 
