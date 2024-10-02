@@ -119,6 +119,16 @@ DATABASES = {
         "PORT": os.getenv("DB_PORT", default="mydb"),
         "OPTIONS": {"charset": "utf8mb4"},
     },
+    
+    'db_task_management': {
+        "ENGINE": 'django.db.backends.mysql',
+        'NAME': os.getenv("DB_NAME", default="mydb"),
+        "USER": os.getenv("DB_USER", default="mydb"),
+        "PASSWORD": os.getenv("DB_PASSWORD", default="mydb"),
+        "HOST": os.getenv("DB_HOST", default="mydb"),
+        "PORT": os.getenv("DB_PORT", default="mydb"),
+        "OPTIONS": {"charset": "utf8mb4"},
+    },
     'nosql': {
         'ENGINE': 'django.db.backends.dummy',
     }
