@@ -18,7 +18,7 @@ services:
     networks:
       - network
 
-  mysql:
+  db_user:
     image: mysql:8
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
@@ -26,7 +26,36 @@ services:
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
     volumes:
-      - ./docker_volume/mysql_data:/var/lib/mysql
+      - ./docker_volume/db_user_data:/var/lib/db_user_data
+    ports:
+      - '3306:${DB_PORT}'
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'mysql',
+          '-h',
+          'localhost',
+          '-u',
+          'root',
+          '-p${DB_PASSWORD}',
+          '-e',
+          'SELECT 1',
+        ]
+      timeout: 1s
+      retries: 20
+    networks:
+      - network
+
+  db_task:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - ./docker_volume/db_task_data:/var/lib/db_task_data
     ports:
       - '3306:${DB_PORT}'
     healthcheck:
