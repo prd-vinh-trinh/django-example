@@ -31,10 +31,12 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_swagger',
     'rest_framework_simplejwt',
+    'rest_framework_mongoengine',
     'drf_yasg',
     'base',
     'api_users',
     'api_auth',
+    'api_pages',
 ]
 
 MIDDLEWARE = [
@@ -73,12 +75,8 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
-    # 'DEFAULT_PERMISSION_CLASSES': [
-    #     'rest_framework.permissions.IsAuthenticated',
-    # ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
-        'core.permissions.CheckScopePermission',
     ],
 }
 API_HOST = os.getenv("API_HOST", default="localhost:8000")
@@ -121,20 +119,16 @@ DATABASES = {
         "PORT": os.getenv("DB_PORT", default="mydb"),
         "OPTIONS": {"charset": "utf8mb4"},
     },
-    "nosql": {
-        "ENGINE": "djongo",
-        "NAME": os.environ.get('MONGO_DB_NAME'),
-        "CLIENT": {
-            "host": os.environ.get('MONGO_DB_HOST'),
-            "port": int(os.environ.get('MONGO_DB_PORT')),
-            "username": os.environ.get('MONGO_DB_USERNAME'),
-            "password": os.environ.get('MONGO_DB_PASSWORD'),
-        },
-        'TEST': {
-            'MIRROR': 'default',
-        },
+    'nosql': {
+        'ENGINE': 'django.db.backends.dummy',
     }
 }
+
+from mongoengine import connect
+
+MONGO_DB_URI = os.getenv("MONGO_DB_URI", default = "mongodb://root:root@mongo:27017")
+
+connect(host=MONGO_DB_URI)
 
 CACHE_TTL = 60 * 1500
 
@@ -151,6 +145,12 @@ CACHES = {
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_IGNORE_RESULT = True
+CELERY_BROKER_URL = os.environ.get('CELERY_URL')
+CELERYD_HIJACK_ROOT_LOGGER = False
+REDIS_CHANNEL_URL = os.environ.get('REDIS_CHANNEL_URL')
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
