@@ -1,8 +1,8 @@
 from rest_framework_mongoengine import DocumentSerializer
 
-from api_pages.models.page import Page
+from api_pages.models.comment import Comment
 
-class PageSerializer(DocumentSerializer):
+class CommentSerializer(DocumentSerializer):
     class Meta:
-        model = Page
-        fields = ['id', 'title', 'author', 'content', 'attached_file', 'created_at']
+        model = Comment
+        fields = ['id', 'content', 'author', 'created_at','updated_at']

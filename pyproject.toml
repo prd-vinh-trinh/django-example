@@ -106,6 +106,8 @@ vine = "5.1.0"
 wcwidth = "0.2.13"
 webencodings = "0.5.1"
 yarg = "0.1.9"
+django-rest-framework-mongoengine = "3.4.1"
+mongoengine = "0.29.1"
 
 
 [build-system]
