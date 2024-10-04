@@ -107,7 +107,7 @@ DEFAULT_FROM_EMAIL = os.getenv(
 )
 
 # Database
-DATABASE_ROUTERS = ['core.utils.db_routers.DatabaseRouter',]
+# DATABASE_ROUTERS = ['core.utils.db_routers.DatabaseRouter',]
 
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 DATABASES = {
