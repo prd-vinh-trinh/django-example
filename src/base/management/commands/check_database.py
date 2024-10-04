@@ -1,26 +1,32 @@
 import os
-import MySQLdb
 from django.core.management.base import BaseCommand, CommandError
 from django.db import connections
-from django.conf import settings
+import MySQLdb
+
 
 class Command(BaseCommand):
-    help = "Check if the database exists, and create it if not."
+    help = "Check if the databases exist, and create them if not."
 
     def handle(self, *args, **options):
-        db_name = os.getenv('DB_NAME')
+        db_name_01 = os.getenv('DB_NAME_01')
+        db_name_02 = os.getenv('DB_NAME_02')
         db_user = os.getenv('DB_USER')
         db_password = os.getenv('DB_PASSWORD')
         db_host = os.getenv('DB_HOST')
         db_port = os.getenv('DB_PORT', 3306)
 
         try:
+            # Kiểm tra kết nối với cơ sở dữ liệu hiện tại
             conn = connections['default']
             conn.ensure_connection()
-            self.stdout.write(self.style.SUCCESS(f"Database '{db_name}' exists."))
+            self.stdout.write(self.style.SUCCESS(
+                f"Database '{db_name_01}' exists."))
+            self.stdout.write(self.style.SUCCESS(
+                f"Database '{db_name_02}' exists."))
         except Exception:
-            self.stdout.write(self.style.WARNING(f"Database '{db_name}' does not exist. Attempting to create it..."))
+            self.stdout.write(self.style.WARNING(f"Checking databases..."))
 
+            # Kết nối đến MySQL server để tạo cơ sở dữ liệu nếu không tồn tại
             try:
                 connection = MySQLdb.connect(
                     host=db_host,
@@ -30,8 +36,17 @@ class Command(BaseCommand):
                 )
                 connection.autocommit(True)
                 cursor = connection.cursor()
-                cursor.execute(f"CREATE DATABASE IF NOT EXISTS {db_name};")
+
+                # Tạo cơ sở dữ liệu nếu không tồn tại
+                for db_name in [db_name_01, db_name_02]:
+                    cursor.execute(
+                        f"CREATE DATABASE IF NOT EXISTS `{db_name}`;")
+                    self.stdout.write(self.style.SUCCESS(
+                        f"Database '{db_name}' created successfully."))
+
                 cursor.close()
-                self.stdout.write(self.style.SUCCESS(f"Database '{db_name}' created successfully."))
             except MySQLdb.Error as err:
                 raise CommandError(f"Error creating database: {err}")
+            finally:
+                if 'connection' in locals():
+                    connection.close()

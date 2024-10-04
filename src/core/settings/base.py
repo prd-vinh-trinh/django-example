@@ -1,3 +1,4 @@
+from mongoengine import connect
 import os
 from os.path import dirname, join
 
@@ -111,23 +112,21 @@ DATABASE_ROUTERS = ['core.utils.db_routers.DatabaseRouter',]
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 DATABASES = {
     'default': {
-    },
-    'db_users': {
         "ENGINE": 'django.db.backends.mysql',
-        'NAME': os.getenv("DB_NAME_01", default="mydb"),
-        "USER": os.getenv("DB_USER_01", default="mydb"),
-        "PASSWORD": os.getenv("DB_PASSWORD_01", default="mydb"),
-        "HOST": os.getenv("DB_HOST_01", default="mydb"),
-        "PORT": os.getenv("DB_PORT_01", default="mydb"),
+        'NAME': os.getenv("DB_NAME_01", default="db_user"),
+        "USER": os.getenv("DB_USER", default="mydb"),
+        "PASSWORD": os.getenv("DB_PASSWORD", default="mydb"),
+        "HOST": os.getenv("DB_HOST", default="mydb"),
+        "PORT": os.getenv("DB_PORT", default="mydb"),
         "OPTIONS": {"charset": "utf8mb4"},
     },
-    'db_tasks': {
+    'db_task': {
         "ENGINE": 'django.db.backends.mysql',
-        'NAME': os.getenv("DB_NAME_02", default="mydb"),
-        "USER": os.getenv("DB_USER_02", default="mydb"),
-        "PASSWORD": os.getenv("DB_PASSWORD_02", default="mydb"),
-        "HOST": os.getenv("DB_HOST_02", default="mydb"),
-        "PORT": os.getenv("DB_PORT_02", default="mydb"),
+        'NAME': os.getenv("DB_NAME_02", default="db_task"),
+        "USER": os.getenv("DB_USER", default="mydb"),
+        "PASSWORD": os.getenv("DB_PASSWORD", default="mydb"),
+        "HOST": os.getenv("DB_HOST", default="mydb"),
+        "PORT": os.getenv("DB_PORT", default="mydb"),
         "OPTIONS": {"charset": "utf8mb4"},
     },
     'nosql': {
@@ -135,9 +134,9 @@ DATABASES = {
     }
 }
 
-from mongoengine import connect
 
-MONGO_DB_URI = os.getenv("MONGO_DB_URI", default = "mongodb://root:root@mongo:27017")
+MONGO_DB_URI = os.getenv(
+    "MONGO_DB_URI", default="mongodb://root:root@mongo:27017")
 
 connect(host=MONGO_DB_URI)
 
