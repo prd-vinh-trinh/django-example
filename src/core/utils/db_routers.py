@@ -1,40 +1,44 @@
 class DatabaseRouter:
     """
-    A router to control if the database should use
-    the relational database, non-relational database, or management database.
+    A router to control database operations for users, tasks, and NoSQL.
     """
 
-    nosql_models = {'log'}
-    management_models = {'task'}
+    user_models = {'user'}
+    task_models = {'task'}
+    nosql_models = {}
 
     def db_for_read(self, model, **_hints):
         """
-        Direct reading operations to the appropriate database.
+        Direct read operations to the appropriate database.
         """
-        if model._meta.model_name in self.nosql_models:
+        if model._meta.model_name in self.user_models:
+            return 'default'
+        elif model._meta.model_name in self.task_models:
+            return 'db_task'
+        elif model._meta.model_name in self.nosql_models:
             return 'nosql'
-        elif model._meta.model_name in self.management_models:
-            return 'management'
         return 'default'
 
     def db_for_write(self, model, **_hints):
         """
-        Direct writing operations to the appropriate database.
+        Direct write operations to the appropriate database.
         """
-        if model._meta.model_name in self.nosql_models:
+        if model._meta.model_name in self.user_models:
+            return 'default'
+        elif model._meta.model_name in self.task_models:
+            return 'db_task'
+        elif model._meta.model_name in self.nosql_models:
             return 'nosql'
-        elif model._meta.model_name in self.management_models:
-            return 'management'
         return 'default'
 
     def allow_migrate(self, _db, _app_label, model_name=None, **_hints):
         """
-        Prevent migration on certain databases.
+        Prevent migrations on certain databases.
         """
-        if _db == 'nosql' or model_name in self.nosql_models:
-            # No migrations for the NoSQL database
+        if _db == 'nosql' or (model_name in self.nosql_models):
             return False
-        elif _db == 'management' and model_name not in self.management_models:
-            # Allow migrations only for management-related models in the management database
+        elif _db == 'default' and model_name not in self.user_models:
+            return False
+        elif _db == 'db_task' and model_name not in self.task_models:
             return False
         return True
