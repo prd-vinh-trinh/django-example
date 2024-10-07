@@ -8,6 +8,7 @@ class Command(BaseCommand):
     help = "Check if the databases exist, and create them if not."
 
     def handle(self, *args, **options):
+        db_name_default = os.getenv('DB_NAME_DEFAULT')
         db_name_01 = os.getenv('DB_NAME_01')
         db_name_02 = os.getenv('DB_NAME_02')
         db_user = os.getenv('DB_USER')
@@ -16,9 +17,10 @@ class Command(BaseCommand):
         db_port = os.getenv('DB_PORT', 3306)
 
         try:
-            # Kiểm tra kết nối với cơ sở dữ liệu hiện tại
             conn = connections['default']
             conn.ensure_connection()
+            self.stdout.write(self.style.SUCCESS(
+                f"Database '{db_name_default}' exists."))
             self.stdout.write(self.style.SUCCESS(
                 f"Database '{db_name_01}' exists."))
             self.stdout.write(self.style.SUCCESS(
@@ -26,7 +28,7 @@ class Command(BaseCommand):
         except Exception:
             self.stdout.write(self.style.WARNING(f"Checking databases..."))
 
-            # Kết nối đến MySQL server để tạo cơ sở dữ liệu nếu không tồn tại
+
             try:
                 connection = MySQLdb.connect(
                     host=db_host,
@@ -38,7 +40,7 @@ class Command(BaseCommand):
                 cursor = connection.cursor()
 
                 # Tạo cơ sở dữ liệu nếu không tồn tại
-                for db_name in [db_name_01, db_name_02]:
+                for db_name in [db_name_default, db_name_01, db_name_02]:
                     cursor.execute(
                         f"CREATE DATABASE IF NOT EXISTS `{db_name}`;")
                     self.stdout.write(self.style.SUCCESS(
