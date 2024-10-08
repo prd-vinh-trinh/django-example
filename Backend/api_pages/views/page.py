@@ -24,7 +24,6 @@ class PageViewSet(BaseViewSet):
     def create(self, request, *args, **kwangs):
         data = request.data
         data['author'] = str(request.user.id)
-        print(data)
         serializer = PageSerializer(data=data)
 
         if serializer.is_valid():

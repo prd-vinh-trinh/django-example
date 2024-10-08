@@ -107,11 +107,19 @@ DEFAULT_FROM_EMAIL = os.getenv(
 )
 
 # Database
-DATABASE_ROUTERS = ['core.utils.db_routers.DatabaseRouter',]
-
+DATABASE_ROUTERS = ['core.utils.UserRouter',]
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 DATABASES = {
     'default': {
+        "ENGINE": 'django.db.backends.mysql',
+        'NAME': os.getenv("DB_NAME_DEFAULT", default="db_user"),
+        "USER": os.getenv("DB_USER", default="mydb"),
+        "PASSWORD": os.getenv("DB_PASSWORD", default="mydb"),
+        "HOST": os.getenv("DB_HOST", default="mydb"),
+        "PORT": os.getenv("DB_PORT", default="mydb"),
+        "OPTIONS": {"charset": "utf8mb4"},
+    },
+    'user_db': {
         "ENGINE": 'django.db.backends.mysql',
         'NAME': os.getenv("DB_NAME_01", default="db_user"),
         "USER": os.getenv("DB_USER", default="mydb"),
@@ -120,7 +128,7 @@ DATABASES = {
         "PORT": os.getenv("DB_PORT", default="mydb"),
         "OPTIONS": {"charset": "utf8mb4"},
     },
-    'db_task': {
+    'task_db': {
         "ENGINE": 'django.db.backends.mysql',
         'NAME': os.getenv("DB_NAME_02", default="db_task"),
         "USER": os.getenv("DB_USER", default="mydb"),
